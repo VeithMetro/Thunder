@@ -1,0 +1,44 @@
+name: CMake
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
+    # You can convert this to a matrix build if you need cross-platform coverage.
+    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Prepare environment - install needed packages (Ubuntu)
+      run: |
+        sudo apt install build-essential cmake ninja-build libusb-1.0-0-dev zlib1g-dev libssl-dev python3-pip
+        pip install jsonref
+    - name: Install generators
+      run: |
+        cmake -G Ninja -S ${{github.workspace}}/Tools -B ${{github.workspace}}/build/tools -DCMAKE_INSTALL_PREFIX=install/usr
+        cmake --build build/tools --target install
+    - name: Build Thunder
+      run: |
+        cmake -G Ninja -S ${{github.workspace}} -B ./build/thunder \
+        -DCMAKE_INSTALL_PREFIX="install/usr" \
+        -DCMAKE_MODULE_PATH="${PWD}/install/usr/include/WPEFramework/Modules" \
+        -DCMAKE_BUILD_TYPE=Debug \
+        -DPERSISTENT_PATH="${PWD}/install/var/wpeframework" \
+        -DVOLATILE_PATH="/tmp" \
+        -DDATA_PATH="${PWD}/install/usr/share/WPEFramework" \
+        -DSYSTEM_PATH="${PWD}/install/usr/lib/wpeframework/plugins" \
+        -DPROXYSTUB_PATH="${PWD}/install/usr/lib/wpeframework/proxystubs" \
+        -DPORT="55555" \
+        -DBINDING="127.0.0.1"
+        cmake --build build/thunder --target install
