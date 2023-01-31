@@ -1,36 +1,33 @@
-name: CMake
+name: CMake Thunder
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   pull_request:
-    branches: [ "master" ]
-
-env:
-  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: Release
-
+    branches: ["master"]
+    
 jobs:
   build:
-    # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
-    # You can convert this to a matrix build if you need cross-platform coverage.
-    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout
     - uses: actions/checkout@v3
 
-    - name: Prepare environment - install needed packages (Ubuntu)
+    - name: Install necessary packages
       run: |
+        cd $GITHUB_WORKSPACE
         sudo apt install build-essential cmake ninja-build libusb-1.0-0-dev zlib1g-dev libssl-dev python3-pip
         pip install jsonref
+        
     - name: Install generators
       run: |
-        cmake -G Ninja -S ${{github.workspace}}/Tools -B ${{github.workspace}}/build/tools -DCMAKE_INSTALL_PREFIX=install/usr
+        cmake -G Ninja -S Tools -B build/tools -DCMAKE_INSTALL_PREFIX=install/usr
         cmake --build build/tools --target install
+        
     - name: Build Thunder
       run: |
-        cmake -G Ninja -S ${{github.workspace}} -B ./build/thunder \
+        cmake -G Ninja -S . -B build/thunder \
         -DCMAKE_INSTALL_PREFIX="install/usr" \
         -DCMAKE_MODULE_PATH="${PWD}/install/usr/include/WPEFramework/Modules" \
         -DTRACING=OFF \
