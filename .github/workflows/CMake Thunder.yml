@@ -8,12 +8,7 @@ on:
     
 jobs:
   build:
-    runs-on: ${{matrix.os}}
-
-    strategy:
-      matrix:
-        build_type: [Debug, Production, Release]
-        os: [ubuntu-latest, windows-latest]
+    runs-on: ubuntu-latest
     
     name: Build type - ${{matrix.build_type}}
     steps:
