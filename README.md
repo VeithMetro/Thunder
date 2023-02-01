@@ -1,5 +1,5 @@
 # Thunder
-aaa
+
 A C++ platform abstraction layer for generic functionality.
 
 #Thunder dependencies
