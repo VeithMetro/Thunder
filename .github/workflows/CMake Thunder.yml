@@ -10,6 +10,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     
+    strategy:
+      matrix:
+        build_type: [Debug, Production, Release]
+    
     name: Build type - ${{matrix.build_type}}
     steps:
     - name: Checkout
