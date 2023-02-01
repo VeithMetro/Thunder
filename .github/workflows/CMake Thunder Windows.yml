@@ -26,10 +26,10 @@ jobs:
         
     - name: Install generators
       run: |
-        cmake -G Ninja -S Tools -B build/tools -DCMAKE_INSTALL_PREFIX=install/usr
-        cmake --build build/tools --target install
+        cmake -G Ninja -S Tools -B build\tools -DCMAKE_INSTALL_PREFIX=install\usr
+        cmake --build build\tools --target install
         
     - name: Build Thunder
       run: |
-        cmake -G Ninja -S . -B build/thunder -DBINDING="127.0.0.1" -DBUILD_TYPE=${{matrix.build_type}} -DCMAKE_INSTALL_PREFIX="install/usr" -DCMAKE_MODULE_PATH="${PWD}/install/usr/include/WPEFramework/Modules" -DDATA_PATH="${PWD}/install/usr/share/WPEFramework" -DMESSAGING=ON -DPERSISTENT_PATH="${PWD}/install/var/wpeframework" -DPORT="55555" -DPROXYSTUB_PATH="${PWD}/install/usr/lib/wpeframework/proxystubs"-DSYSTEM_PATH="${PWD}/install/usr/lib/wpeframework/plugins" -DTRACING=OFF -DVOLATILE_PATH="/tmp"
-        cmake --build build/thunder --target install
+        cmake -G Ninja -S . -B build\thunder -DBINDING="127.0.0.1" -DBUILD_TYPE=${{matrix.build_type}} -DCMAKE_INSTALL_PREFIX="install\usr" -DCMAKE_MODULE_PATH="${PWD}\install\usr\include\WPEFramework\Modules" -DDATA_PATH="${PWD}\install\usr\share\WPEFramework" -DMESSAGING=ON -DPERSISTENT_PATH="${PWD}\install\var\wpeframework" -DPORT="55555" -DPROXYSTUB_PATH="${PWD}\install\usr\lib\wpeframework\proxystubs"-DSYSTEM_PATH="${PWD}\install\usr\lib\wpeframework\plugins" -DTRACING=OFF -DVOLATILE_PATH="\tmp"
+        cmake --build build\thunder --target install
