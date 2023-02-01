@@ -12,7 +12,7 @@ jobs:
     
     strategy:
       matrix:
-        build_type: [Debug, Production, Release]
+        build_type: [Debug, DebugOptimized, RelWithDebInfo, Release, MinSizeRel]
     
     name: Build type - ${{matrix.build_type}}
     steps:
@@ -33,7 +33,7 @@ jobs:
       run: |
         cmake -G Ninja -S . -B build/thunder \
         -DBINDING="127.0.0.1" \
-        -DBUILD_TYPE=${{matrix.build_type}} \
+        -DCMAKE_BUILD_TYPE=${{matrix.build_type}} \
         -DCMAKE_INSTALL_PREFIX="install/usr" \
         -DCMAKE_MODULE_PATH="${PWD}/install/usr/include/WPEFramework/Modules" \
         -DDATA_PATH="${PWD}/install/usr/share/WPEFramework" \
