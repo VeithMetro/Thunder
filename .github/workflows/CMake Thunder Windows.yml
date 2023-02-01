@@ -31,5 +31,17 @@ jobs:
         
     - name: Build Thunder
       run: |
-        cmake -G Ninja -S . -B build/thunder -DBINDING="127.0.0.1" -DBUILD_TYPE=${{matrix.build_type}} -DCMAKE_INSTALL_PREFIX="install/usr" -DCMAKE_MODULE_PATH="install/usr/include/WPEFramework/Modules" -DDATA_PATH="install/usr/share/WPEFramework" -DMESSAGING=ON -DPERSISTENT_PATH="install/var/wpeframework" -DPORT="55555" -DPROXYSTUB_PATH="install/usr/lib/wpeframework/proxystubs"-DSYSTEM_PATH="install/usr/lib/wpeframework/plugins" -DTRACING=OFF -DVOLATILE_PATH="/tmp"
+        cmake -G Ninja -S . -B build/thunder `
+        -DBINDING="127.0.0.1" `
+        -DBUILD_TYPE=${{matrix.build_type}} `
+        -DCMAKE_INSTALL_PREFIX="install/usr" `
+        -DCMAKE_MODULE_PATH="install/usr/include/WPEFramework/Modules" `
+        -DDATA_PATH="install/usr/share/WPEFramework" `
+        -DMESSAGING=ON `
+        -DPERSISTENT_PATH="install/var/wpeframework" `
+        -DPORT="55555" `
+        -DPROXYSTUB_PATH="install/usr/lib/wpeframework/proxystubs" `
+        -DSYSTEM_PATH="install/usr/lib/wpeframework/plugins" `
+        -DTRACING=OFF `
+        -DVOLATILE_PATH="/tmp"
         cmake --build build/thunder --target install
