@@ -19,6 +19,9 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+      with:
+        path: Thunder
+        repository: VeithMetro/Thunder
 
     - name: Install necessary packages
       run: |
@@ -27,22 +30,22 @@ jobs:
         
     - name: Install generators
       run: |
-        cmake -G Ninja -S Tools -B build/tools -DCMAKE_INSTALL_PREFIX=install/usr
-        cmake --build build/tools --target install
+        cmake -G Ninja -S Tools -B Thunder/build/tools -DCMAKE_INSTALL_PREFIX=Thunder/install/usr
+        cmake --build Thunder/build/tools --target install
         
     - name: Build Thunder
       run: |
-        cmake -G Ninja -S . -B build/thunder \
+        cmake -G Ninja -S Thunder -B Thunder/build/thunder \
         -DBINDING="127.0.0.1" \
         -DCMAKE_BUILD_TYPE=${{matrix.build_type}} \
-        -DCMAKE_INSTALL_PREFIX="install/usr" \
-        -DCMAKE_MODULE_PATH="${PWD}/install/usr/include/WPEFramework/Modules" \
-        -DDATA_PATH="${PWD}/install/usr/share/WPEFramework" \
+        -DCMAKE_INSTALL_PREFIX="Thunder/install/usr" \
+        -DCMAKE_MODULE_PATH="${PWD}/Thunder/install/usr/include/WPEFramework/Modules" \
+        -DDATA_PATH="${PWD}/Thunder/install/usr/share/WPEFramework" \
         -DMESSAGING=ON \
-        -DPERSISTENT_PATH="${PWD}/install/var/wpeframework" \
+        -DPERSISTENT_PATH="${PWD}/Thunder/install/var/wpeframework" \
         -DPORT="55555" \
-        -DPROXYSTUB_PATH="${PWD}/install/usr/lib/wpeframework/proxystubs" \
-        -DSYSTEM_PATH="${PWD}/install/usr/lib/wpeframework/plugins" \
+        -DPROXYSTUB_PATH="${PWD}/Thunder/install/usr/lib/wpeframework/proxystubs" \
+        -DSYSTEM_PATH="${PWD}/Thunder/install/usr/lib/wpeframework/plugins" \
         -DTRACING=OFF \
-        -DVOLATILE_PATH="/tmp"
-        cmake --build build/thunder --target install
+        -DVOLATILE_PATH="Thunder/tmp"
+        cmake --build Thunder/build/thunder --target install
