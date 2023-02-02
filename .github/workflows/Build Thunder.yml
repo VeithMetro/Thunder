@@ -20,7 +20,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
       with:
-        path: Thunder
         repository: VeithMetro/Thunder
 
     - name: Install necessary packages
