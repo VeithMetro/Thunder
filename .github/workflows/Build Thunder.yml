@@ -20,6 +20,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
       with:
+        path: Thunder/${{matrix.build_type}}
         repository: VeithMetro/Thunder
 
     - name: Install necessary packages
@@ -29,12 +30,12 @@ jobs:
         
     - name: Install generators
       run: |
-        cmake -G Ninja -S Tools -B build/tools -DCMAKE_INSTALL_PREFIX=install/usr
+        cmake -G Ninja -S Thunder/${{matrix.build_type}}/Tools -B build/tools -DCMAKE_INSTALL_PREFIX=install/usr
         cmake --build build/tools --target install
         
     - name: Build Thunder
       run: |
-        cmake -G Ninja -S . -B build/thunder \
+        cmake -G Ninja -S Thunder/${{matrix.build_type}} -B build/thunder \
         -DBINDING="127.0.0.1" \
         -DCMAKE_BUILD_TYPE=${{matrix.build_type}} \
         -DCMAKE_INSTALL_PREFIX="install/usr" \
