@@ -48,3 +48,9 @@ jobs:
         -DTRACING=OFF \
         -DVOLATILE_PATH="tmp"
         cmake --build build/thunder --target install
+    
+    - name: Upload
+      uses: actions/upload-artifact@v3
+      with:
+        name: Thunder-artifact
+        path: .
