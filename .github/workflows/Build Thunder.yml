@@ -51,6 +51,13 @@ jobs:
         -DVOLATILE_PATH="tmp"
         cmake --build ${{matrix.build_type}}/build/thunder --target install
     
+    - name: Print
+      run: |
+        pwd
+        ls -la
+        cd ${{matrix.build_type}}
+        ls -la
+    
     - name: Upload
       uses: actions/upload-artifact@v3
       with:
