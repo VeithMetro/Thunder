@@ -55,4 +55,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: Thunder-${{matrix.build_type}}-artifact
-        path: ${{matrix.build_type}}
+        path: .
