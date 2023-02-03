@@ -51,8 +51,11 @@ jobs:
         -DVOLATILE_PATH="tmp"
         cmake --build ${{matrix.build_type}}/build/thunder --target install
     
+    - name: Tar files
+      run: tar -czvf ${{matrix.build_type}}.tar.gz ${{matrix.build_type}}
+    
     - name: Upload
       uses: actions/upload-artifact@v3
       with:
         name: Thunder-${{matrix.build_type}}-artifact
-        path: ${{matrix.build_type}}
+        path: ${{matrix.build_type}}.tar.gz
