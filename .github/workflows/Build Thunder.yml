@@ -30,9 +30,9 @@ jobs:
         
     - name: Install generators
       run: |
-        cmake -G Ninja -S Thunder/Tools -B ${{matrix.build_type}}/build/Tools \
+        cmake -G Ninja -S Thunder/Tools -B ${{matrix.build_type}}/build/ThunderTools \
         -DCMAKE_INSTALL_PREFIX=${{matrix.build_type}}/install/usr
-        cmake --build ${{matrix.build_type}}/build/Tools --target install
+        cmake --build ${{matrix.build_type}}/build/ThunderTools --target install
         
     - name: Build Thunder
       run: |
