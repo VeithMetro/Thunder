@@ -24,31 +24,22 @@ jobs:
     steps:
     
 # ----- ThunderOnWindows -----
-    - name: Checkout ThunderOnWindows - default
-      if: ${{ !contains(github.event.pull_request.body, '[ThunderOnWindows]') }}
+    - name: Checkout ThunderOnWindows
       uses: actions/checkout@v3
       with:
         path: ThunderOnWindows
         repository: WebPlatformForEmbedded/ThunderOnWindows
-
-    - name: Checkout ThunderOnWindows - ${{env.branch}}
-      if: contains(github.event.pull_request.body, '[ThunderOnWindows]')
-      uses: actions/checkout@v3
-      with:
-        path: ThunderOnWindows
-        repository: WebPlatformForEmbedded/ThunderOnWindows
-        ref: ${{env.branch}}
 
 # ----- Thunder -----
     - name: Checkout Thunder - default
-      if: ${{ !contains(github.event.pull_request.body, '[Thunder]') }}
+      if: ${{ !contains(github.event.pull_request.body, '[DependsOnThunder]') }}
       uses: actions/checkout@v3
       with:
         path: ThunderOnWindows/Thunder
         repository: ${{github.repository_owner}}/Thunder
 
     - name: Checkout Thunder - ${{env.branch}}
-      if: contains(github.event.pull_request.body, '[Thunder]')
+      if: contains(github.event.pull_request.body, '[DependsOnThunder]')
       uses: actions/checkout@v3
       with:
         path: ThunderOnWindows/Thunder
@@ -57,14 +48,14 @@ jobs:
 
 # ----- ThunderTools -----
     - name: Checkout ThunderTools - default
-      if: ${{ !contains(github.event.pull_request.body, '[ThunderTools]') }}
+      if: ${{ !contains(github.event.pull_request.body, '[DependsOnThunderTools]') }}
       uses: actions/checkout@v3
       with:
         path: ThunderOnWindows/ThunderTools
         repository: ${{github.repository_owner}}/ThunderTools
 
     - name: Checkout ThunderTools - ${{env.branch}}
-      if: contains(github.event.pull_request.body, '[ThunderTools]')
+      if: contains(github.event.pull_request.body, '[DependsOnThunderTools]')
       uses: actions/checkout@v3
       with:
         path: ThunderOnWindows/ThunderTools
@@ -73,67 +64,31 @@ jobs:
 
 # ----- ThunderClientLibraries -----
     - name: Checkout ThunderClientLibraries - default
-      if: ${{ !contains(github.event.pull_request.body, '[ThunderClientLibraries]') }}
       uses: actions/checkout@v3
       with:
         path: ThunderOnWindows/ThunderClientLibraries
         repository: ${{github.repository_owner}}/ThunderClientLibraries
-        
-    - name: Checkout ThunderClientLibraries - ${{env.branch}}
-      if: contains(github.event.pull_request.body, '[ThunderClientLibraries]')
-      uses: actions/checkout@v3
-      with:
-        path: ThunderOnWindows/ThunderClientLibraries
-        repository: ${{github.repository_owner}}/ThunderClientLibraries
-        ref: ${{env.branch}}
 
 # ----- ThunderInterfaces -----
     - name: Checkout ThunderInterfaces - default
-      if: ${{ !contains(github.event.pull_request.body, '[ThunderInterfaces]') }}
       uses: actions/checkout@v3
       with:
         path: ThunderOnWindows/ThunderInterfaces
         repository: ${{github.repository_owner}}/ThunderInterfaces
-
-    - name: Checkout ThunderInterfaces - ${{env.branch}}
-      if: contains(github.event.pull_request.body, '[ThunderInterfaces]')
-      uses: actions/checkout@v3
-      with:
-        path: ThunderOnWindows/ThunderInterfaces
-        repository: ${{github.repository_owner}}/ThunderInterfaces
-        ref: ${{env.branch}}
 
 # ----- ThunderNanoServices -----
     - name: Checkout ThunderNanoServices - default
-      if: ${{ !contains(github.event.pull_request.body, '[ThunderNanoServices]') }}
       uses: actions/checkout@v3
       with:
         path: ThunderOnWindows/ThunderNanoServices - ${{env.branch}}
         repository: ${{github.repository_owner}}/ThunderNanoServices
-        
-    - name: Checkout ThunderNanoServices - ${{env.branch}}
-      if: contains(github.event.pull_request.body, '[ThunderNanoServices]')
-      uses: actions/checkout@v3
-      with:
-        path: ThunderOnWindows/ThunderNanoServices
-        repository: ${{github.repository_owner}}/ThunderNanoServices
-        ref: ${{env.branch}}
 
 # ----- ThunderNanoServicesRDK -----
     - name: Checkout ThunderNanoServicesRDK - default
-      if: ${{ !contains(github.event.pull_request.body, '[ThunderNanoServicesRDK]') }}
       uses: actions/checkout@v3
       with:
         path: ThunderOnWindows/ThunderNanoServicesRDK
         repository: WebPlatformForEmbedded/ThunderNanoServicesRDK
-
-    - name: Checkout ThunderNanoServicesRDK - ${{env.branch}}
-      if: contains(github.event.pull_request.body, '[ThunderNanoServicesRDK]')
-      uses: actions/checkout@v3
-      with:
-        path: ThunderOnWindows/ThunderNanoServicesRDK
-        repository: WebPlatformForEmbedded/ThunderNanoServicesRDK
-        ref: ${{env.branch}}
 
 # ----- Building -----
     - name: Install jsonref
