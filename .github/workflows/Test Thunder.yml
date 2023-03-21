@@ -1,11 +1,14 @@
 name: Test Thunder
 
 on:
-  push:
-    branches: ["master"]
   pull_request:
     branches: ["master"]
  
+env:
+ branch: ${{ github.head_ref || github.ref_name }} 
+ lib: LD_LIBRARY_PATH=${{github.workspace}}/${{matrix.build_type}}/install/usr/lib:$LD_LIBRARY_PATH
+ path: PATH=${{github.workspace}}/${{matrix.build_type}}/install/usr/bin:$PATH
+  
 jobs:
   Thunder:
     runs-on: ubuntu-20.04
@@ -13,24 +16,38 @@ jobs:
     strategy:
       matrix:
         build_type: [Debug, Release, MinSizeRel]
-      
-    env:
-      lib: LD_LIBRARY_PATH=${{github.workspace}}/${{matrix.build_type}}/install/usr/lib:$LD_LIBRARY_PATH
-      path: PATH=${{github.workspace}}/${{matrix.build_type}}/install/usr/bin:$PATH
 
     name: Testing - ${{matrix.build_type}}
     steps:
-    - name: Checkout Thunder
+    - name: Checkout Thunder - default
+      if: ${{ !contains(github.event.pull_request.body, '[Thunder]') }}
       uses: actions/checkout@v3
       with:
         path: Thunder
         repository: rdkcentral/Thunder
-
-    - name: Checkout ThunderTools
+        
+    - name: Checkout Thunder - ${{env.branch}}
+      if: contains(github.event.pull_request.body, '[Thunder]')
+      uses: actions/checkout@v3
+      with:
+        path: Thunder
+        repository: rdkcentral/Thunder
+        ref: ${{env.branch}}
+        
+    - name: Checkout ThunderTools - default
+      if: ${{ !contains(github.event.pull_request.body, '[ThunderTools]') }}
       uses: actions/checkout@v3
       with:
         path: ThunderTools
         repository: rdkcentral/ThunderTools
+
+    - name: Checkout ThunderTools - ${{env.branch}}
+      if: contains(github.event.pull_request.body, '[ThunderTools]')
+      uses: actions/checkout@v3
+      with:
+        path: ThunderTools
+        repository: rdkcentral/ThunderTools
+        ref: ${{env.branch}}
 
     - name: Install necessary packages
       uses: nick-fields/retry@v2
