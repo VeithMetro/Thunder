@@ -21,7 +21,7 @@ jobs:
     name: Build type - ${{matrix.build_type}}
     steps:
     - name: Print
-      run: echo ${{env.PRdesc}}
+      run: echo "${{env.PRdesc}}"
     
     - name: Checkout Thunder
       uses: actions/checkout@v3
