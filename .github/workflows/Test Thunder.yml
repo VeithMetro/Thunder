@@ -6,8 +6,6 @@ on:
  
 env:
  branch: ${{ github.head_ref || github.ref_name }} 
- lib: LD_LIBRARY_PATH=${{github.workspace}}/${{matrix.build_type}}/install/usr/lib:$LD_LIBRARY_PATH
- path: PATH=${{github.workspace}}/${{matrix.build_type}}/install/usr/bin:$PATH
   
 jobs:
   Thunder:
@@ -16,6 +14,10 @@ jobs:
     strategy:
       matrix:
         build_type: [Debug, Release, MinSizeRel]
+
+    env:
+     lib: LD_LIBRARY_PATH=${{github.workspace}}/${{matrix.build_type}}/install/usr/lib:$LD_LIBRARY_PATH
+     path: PATH=${{github.workspace}}/${{matrix.build_type}}/install/usr/bin:$PATH
 
     name: Testing - ${{matrix.build_type}}
     steps:
