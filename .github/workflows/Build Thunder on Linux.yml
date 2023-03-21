@@ -8,7 +8,7 @@ on:
   workflow_call:
  
 env:
-  PRdesc: github.event.pull_request.body
+  PRdesc: ${{github.event.pull_request.body}}
  
 jobs:
   Thunder:
