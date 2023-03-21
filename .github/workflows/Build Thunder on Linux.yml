@@ -17,11 +17,12 @@ jobs:
     strategy:
       matrix:
         build_type: [Debug, Release, MinSizeRel]
+        changes: ${{ fromJSON(github.event.pull_request.body) }}
     
     name: Build type - ${{matrix.build_type}}
     steps:
     - name: Print
-      run: echo "${{env.PRdesc}}"
+      run: echo ${{matrix.changes}}
     
     - name: Checkout Thunder
       uses: actions/checkout@v3
