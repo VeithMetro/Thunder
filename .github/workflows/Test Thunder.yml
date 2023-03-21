@@ -22,14 +22,14 @@ jobs:
     name: Testing - ${{matrix.build_type}}
     steps:
     - name: Checkout Thunder - default
-      if: ${{ !contains(github.event.pull_request.body, '[Thunder]') }}
+      if: ${{ !contains(github.event.pull_request.body, '[DependsOnThunder]') }}
       uses: actions/checkout@v3
       with:
         path: Thunder
         repository: rdkcentral/Thunder
         
     - name: Checkout Thunder - ${{env.branch}}
-      if: contains(github.event.pull_request.body, '[Thunder]')
+      if: contains(github.event.pull_request.body, '[DependsOnThunder]')
       uses: actions/checkout@v3
       with:
         path: Thunder
@@ -37,14 +37,14 @@ jobs:
         ref: ${{env.branch}}
         
     - name: Checkout ThunderTools - default
-      if: ${{ !contains(github.event.pull_request.body, '[ThunderTools]') }}
+      if: ${{ !contains(github.event.pull_request.body, '[DependsOnThunderTools]') }}
       uses: actions/checkout@v3
       with:
         path: ThunderTools
         repository: rdkcentral/ThunderTools
 
     - name: Checkout ThunderTools - ${{env.branch}}
-      if: contains(github.event.pull_request.body, '[ThunderTools]')
+      if: contains(github.event.pull_request.body, '[DependsOnThunderTools]')
       uses: actions/checkout@v3
       with:
         path: ThunderTools
