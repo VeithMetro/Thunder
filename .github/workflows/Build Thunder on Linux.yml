@@ -4,10 +4,7 @@ on:
   pull_request:
     branches: ["master"]
   workflow_call:
- 
-env:
- branch: ${{ github.head_ref || github.ref_name }}
- 
+
 jobs:
   Thunder:
     runs-on: ubuntu-latest
@@ -18,61 +15,88 @@ jobs:
     
     name: Build type - ${{matrix.build_type}}
     steps:
-    - name: First regex ThunderTools
-      id: regex1
+# ----- Thunder -----
+    - name: First regex Thunder
+      id: thunder1
       uses: AsasInnab/regex-action@v1
       with:
-        regex_pattern: '\[DependsOn:ThunderTools=.+\]'
+        regex_pattern: '\[DependsOn=Thunder:.+\]'
+        regex_flags: 'gim'
+        search_string: ${{github.event.pull_request.body}}
+    
+    - name: Second regex Thunder
+      id: thunder2
+      uses: AsasInnab/regex-action@v1
+      with:
+        regex_pattern: ':.+\]'
+        regex_flags: 'gim'
+        search_string: ${{steps.thunder1.outputs.first_match}}
+    
+    - name: Third regex Thunder
+      id: thunder3
+      uses: AsasInnab/regex-action@v1
+      with:
+        regex_pattern: '[^:].+[^\]]'
+        regex_flags: 'gim'
+        search_string: ${{steps.thunder2.outputs.first_match}}
+
+    - name: Checkout Thunder - default
+      if: ${{ !contains(github.event.pull_request.body, '[DependsOn=Thunder') }}
+      uses: actions/checkout@v3
+      with:
+        path: Thunder
+        repository: rdkcentral/Thunder
+        
+    - name: Checkout Thunder - ${{steps.thunder3.outputs.first_match}}
+      if: contains(github.event.pull_request.body, '[DependsOn=Thunder')
+      uses: actions/checkout@v3
+      with:
+        path: Thunder
+        repository: rdkcentral/Thunder
+        ref: ${{steps.thunder3.outputs.first_match}}
+    
+# ----- ThunderTools -----
+    - name: First regex ThunderTools
+      id: tools1
+      uses: AsasInnab/regex-action@v1
+      with:
+        regex_pattern: '\[DependsOn=ThunderTools:.+\]'
         regex_flags: 'gim'
         search_string: ${{github.event.pull_request.body}}
     
     - name: Second regex ThunderTools
-      id: regex2
+      id: tools2
       uses: AsasInnab/regex-action@v1
       with:
-        regex_pattern: '=.+\]'
+        regex_pattern: ':.+\]'
         regex_flags: 'gim'
-        search_string: ${{steps.regex1.outputs.first_match}}
+        search_string: ${{steps.tools1.outputs.first_match}}
     
     - name: Third regex ThunderTools
-      id: regex3
+      id: tools3
       uses: AsasInnab/regex-action@v1
       with:
-        regex_pattern: '[^=].+[^\]]'
+        regex_pattern: '[^:].+[^\]]'
         regex_flags: 'gim'
-        search_string: ${{steps.regex2.outputs.first_match}}
-
-    - name: Checkout Thunder - default
-      if: ${{ !contains(github.event.pull_request.body, '[DependsOnThunder]') }}
-      uses: actions/checkout@v3
-      with:
-        path: Thunder
-        repository: rdkcentral/Thunder
-        
-    - name: Checkout Thunder - ${{env.branch}}
-      if: contains(github.event.pull_request.body, '[DependsOnThunder]')
-      uses: actions/checkout@v3
-      with:
-        path: Thunder
-        repository: rdkcentral/Thunder
-        ref: ${{env.branch}}
+        search_string: ${{steps.tools2.outputs.first_match}}
         
     - name: Checkout ThunderTools - default
-      if: ${{ !contains(github.event.pull_request.body, 'DependsOn') }}
+      if: ${{ !contains(github.event.pull_request.body, '[DependsOn=ThunderTools:') }}
       uses: actions/checkout@v3
       with:
         path: ThunderTools
         repository: rdkcentral/ThunderTools
 
 # CHANGE TO RDKCENTRAL
-    - name: Checkout ThunderTools - ${{env.branch}}
-      if: contains(github.event.pull_request.body, 'DependsOn')
+    - name: Checkout ThunderTools - ${{steps.tools3.outputs.first_match}}
+      if: contains(github.event.pull_request.body, '[DependsOn=ThunderTools:')
       uses: actions/checkout@v3
       with:
         path: ThunderTools
         repository: VeithMetro/ThunderTools
-        ref: ${{steps.regex3.outputs.first_match}}
+        ref: ${{steps.tools3.outputs.first_match}}
 
+# ----- Building -----
     - name: Install necessary packages
       uses: nick-fields/retry@v2
       with:
