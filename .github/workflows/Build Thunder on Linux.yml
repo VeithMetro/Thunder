@@ -30,14 +30,14 @@ jobs:
         repository: rdkcentral/Thunder
         
     - name: Checkout ThunderTools - default
-      if: ${{!contains('${{github.event.pull_request.body}}', '$ThunderTools')}}
+      if: ${{ !contains(github.event.pull_request.body, '$ThunderTools') }}
       uses: actions/checkout@v3
       with:
         path: ThunderTools
         repository: rdkcentral/ThunderTools
 
     - name: Checkout ThunderTools - ${{env.branch}}
-      if: contains('${{github.event.pull_request.body}}', '$ThunderTools')
+      if: contains(github.event.pull_request.body, '$ThunderTools')
       uses: actions/checkout@v3
       with:
         path: ThunderTools
