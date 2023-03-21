@@ -7,6 +7,9 @@ on:
     branches: ["master"]
   workflow_call:
  
+env:
+  PRdesc: github.event.pull_request.body
+ 
 jobs:
   Thunder:
     runs-on: ubuntu-latest
@@ -17,6 +20,9 @@ jobs:
     
     name: Build type - ${{matrix.build_type}}
     steps:
+    - name: Print
+      run: echo ${{env.PRdesc}}
+    
     - name: Checkout Thunder
       uses: actions/checkout@v3
       with:
