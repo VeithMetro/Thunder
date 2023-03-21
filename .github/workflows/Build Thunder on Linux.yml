@@ -64,12 +64,13 @@ jobs:
         path: ThunderTools
         repository: rdkcentral/ThunderTools
 
+# CHANGE TO RDKCENTRAL
     - name: Checkout ThunderTools - ${{env.branch}}
       if: contains(github.event.pull_request.body, 'DependsOn')
       uses: actions/checkout@v3
       with:
         path: ThunderTools
-        repository: rdkcentral/ThunderTools
+        repository: VeithMetro/ThunderTools
         ref: ${{steps.regex3.outputs.first_match}}
 
     - name: Install necessary packages
