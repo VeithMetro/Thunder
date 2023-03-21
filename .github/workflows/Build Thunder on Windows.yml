@@ -63,28 +63,28 @@ jobs:
         ref: ${{env.branch}}
 
 # ----- ThunderClientLibraries -----
-    - name: Checkout ThunderClientLibraries - default
+    - name: Checkout ThunderClientLibraries
       uses: actions/checkout@v3
       with:
         path: ThunderOnWindows/ThunderClientLibraries
         repository: ${{github.repository_owner}}/ThunderClientLibraries
 
 # ----- ThunderInterfaces -----
-    - name: Checkout ThunderInterfaces - default
+    - name: Checkout ThunderInterfaces
       uses: actions/checkout@v3
       with:
         path: ThunderOnWindows/ThunderInterfaces
         repository: ${{github.repository_owner}}/ThunderInterfaces
 
 # ----- ThunderNanoServices -----
-    - name: Checkout ThunderNanoServices - default
+    - name: Checkout ThunderNanoServices
       uses: actions/checkout@v3
       with:
-        path: ThunderOnWindows/ThunderNanoServices - ${{env.branch}}
+        path: ThunderOnWindows/ThunderNanoServices
         repository: ${{github.repository_owner}}/ThunderNanoServices
 
 # ----- ThunderNanoServicesRDK -----
-    - name: Checkout ThunderNanoServicesRDK - default
+    - name: Checkout ThunderNanoServicesRDK
       uses: actions/checkout@v3
       with:
         path: ThunderOnWindows/ThunderNanoServicesRDK
