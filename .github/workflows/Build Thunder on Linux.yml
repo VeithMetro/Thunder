@@ -18,6 +18,16 @@ jobs:
     
     name: Build type - ${{matrix.build_type}}
     steps:
+    - name: Find branch name
+      uses: AsasInnab/regex-action@v1
+      with:
+        regex_pattern: 'development-[0-9]+'
+        regex_flags: 'gim'
+        search_string: ${{github.event.pull_request.body}}
+    
+    - name: Echo branch name
+      run: echo "${{ steps.jira.outputs.first_match }}"
+    
     - name: Checkout Thunder - default
       if: ${{ !contains(github.event.pull_request.body, '[DependsOnThunder]') }}
       uses: actions/checkout@v3
