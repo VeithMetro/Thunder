@@ -18,16 +18,30 @@ jobs:
     
     name: Build type - ${{matrix.build_type}}
     steps:
-    - name: Find branch name
+    - name: First regex ThunderTools
+      id: regex1
       uses: AsasInnab/regex-action@v1
       with:
-        regex_pattern: 'development-[0-9]+'
+        regex_pattern: '\[DependsOn:ThunderTools=.+\]'
         regex_flags: 'gim'
         search_string: ${{github.event.pull_request.body}}
     
-    - name: Echo branch name
-      run: echo "${{ steps.jira.outputs.first_match }}"
+    - name: Second regex ThunderTools
+      id: regex2
+      uses: AsasInnab/regex-action@v1
+      with:
+        regex_pattern: '=.+\]'
+        regex_flags: 'gim'
+        search_string: ${{steps.regex1.outputs.first_match}}
     
+    - name: Third regex ThunderTools
+      id: regex3
+      uses: AsasInnab/regex-action@v1
+      with:
+        regex_pattern: '[^=].+[^\]]'
+        regex_flags: 'gim'
+        search_string: ${{steps.regex2.outputs.first_match}}
+
     - name: Checkout Thunder - default
       if: ${{ !contains(github.event.pull_request.body, '[DependsOnThunder]') }}
       uses: actions/checkout@v3
@@ -44,19 +58,19 @@ jobs:
         ref: ${{env.branch}}
         
     - name: Checkout ThunderTools - default
-      if: ${{ !contains(github.event.pull_request.body, '[DependsOnThunderTools]') }}
+      if: ${{ !contains(github.event.pull_request.body, 'DependsOn') }}
       uses: actions/checkout@v3
       with:
         path: ThunderTools
         repository: rdkcentral/ThunderTools
 
     - name: Checkout ThunderTools - ${{env.branch}}
-      if: contains(github.event.pull_request.body, '[DependsOnThunderTools]')
+      if: contains(github.event.pull_request.body, 'DependsOn')
       uses: actions/checkout@v3
       with:
         path: ThunderTools
         repository: rdkcentral/ThunderTools
-        ref: ${{env.branch}}
+        ref: ${{steps.regex3.outputs.first_match}}
 
     - name: Install necessary packages
       uses: nick-fields/retry@v2
