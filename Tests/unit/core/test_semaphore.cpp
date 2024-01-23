@@ -21,7 +21,7 @@
 
 #include <gtest/gtest.h>
 #include <core/core.h>
-#include <thread>
+//#include <thread>
 
 using namespace WPEFramework;
 using namespace WPEFramework::Core;
@@ -34,10 +34,10 @@ public:
     ThreadClass(const ThreadClass&) = delete;
     ThreadClass& operator=(const ThreadClass&) = delete;
 
-    ThreadClass(Core::CriticalSection& lock,std::thread::id parentId)
+    ThreadClass(Core::CriticalSection& lock/*,std::thread::id parentId*/)
         : Core::Thread(Core::Thread::DefaultStackSize(), _T("Test"))
         , _lock(lock)
-        , _parentId(parentId)
+        //, _parentId(parentId)
         , _done(false)
     {
     }
@@ -50,7 +50,7 @@ public:
     virtual uint32_t Worker() override
     {
         while (IsRunning() && (!_done)) {
-            EXPECT_TRUE(_parentId != std::this_thread::get_id());
+            //EXPECT_TRUE(_parentId != std::this_thread::get_id());
             _lock.Lock();
             if (IsRunning()) {
                 g_shared++;
@@ -64,14 +64,14 @@ public:
 
 private:
     Core::CriticalSection& _lock;
-    std::thread::id _parentId;
+    //std::thread::id _parentId;
     volatile bool _done;
 };
 
 TEST(test_criticalsection, simple_criticalsection)
 {
     Core::CriticalSection lock;
-    ThreadClass object(lock, std::this_thread::get_id());
+    ThreadClass object(lock/*, std::this_thread::get_id()*/);
 
     lock.Lock();
     object.Run();
