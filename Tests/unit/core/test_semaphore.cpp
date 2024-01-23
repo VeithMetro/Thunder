@@ -30,7 +30,7 @@ static int g_shared = 1;
 
 class ThreadClass : public Core::Thread {
 public:
-    ThreadClass() = delete;
+    //ThreadClass() = delete;
     ThreadClass(const ThreadClass&) = delete;
     ThreadClass& operator=(const ThreadClass&) = delete;
 
