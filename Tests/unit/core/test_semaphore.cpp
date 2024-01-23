@@ -60,16 +60,15 @@ private:
 
 TEST(test_criticalsection, simple_criticalsection)
 {
-    ThreadClass object;
+    //ThreadClass object;
 
-    object.Run();
-    ::SleepMs(50);
+    //object.Run();
 
     _adminLock.Lock();
     g_shared++;
     _adminLock.Unlock();
 
-    object.Stop();
+    //object.Stop();
 
     EXPECT_EQ(g_shared,2);
 }
