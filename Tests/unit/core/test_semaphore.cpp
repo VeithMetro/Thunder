@@ -79,7 +79,7 @@ private:
 TEST(test_criticalsection, simple_criticalsection)
 {
     ThreadClass object;
-    //EXPECT_TRUE(object.GetThreadId() != std::this_thread::get_id());
+    EXPECT_TRUE(object.GetThreadId() != std::this_thread::get_id());
     Core::CriticalSection& lock = object.GetLock();
     //object.Init();
     
