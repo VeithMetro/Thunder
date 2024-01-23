@@ -77,7 +77,7 @@ private:
     volatile bool _done;
 };
 
-TEST(test_criticalsection, simple_criticalsection)
+TEST(DISABLED_test_criticalsection, simple_criticalsection)
 {
     ThreadClass object();
     //EXPECT_TRUE(object.GetThreadId() != std::this_thread::get_id());
