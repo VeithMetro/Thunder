@@ -2,7 +2,7 @@ name: Test Thunder
 
 on:
   push:
-    branches: ["master"]
+    # branches: ["master"]
     paths-ignore:
       - 'doc/**'
       - 'docs/**'
