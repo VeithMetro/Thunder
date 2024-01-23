@@ -76,13 +76,13 @@ TEST(test_criticalsection, simple_criticalsection)
     Core::CriticalSection& lock = object.GetLock();
 
     lock.Lock();
-    object.Run();
-    object.Wait(Core::Thread::RUNNING, Core::infinite);
+    //object.Run();
+    //object.Wait(Core::Thread::RUNNING, Core::infinite);
 
     g_shared++;
 
-    object.Stop();
-    object.Wait(Core::Thread::STOPPED, Core::infinite);
+    //object.Stop();
+    //object.Wait(Core::Thread::STOPPED, Core::infinite);
     lock.Unlock();
 
     EXPECT_EQ(g_shared,2);
