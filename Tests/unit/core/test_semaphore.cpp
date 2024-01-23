@@ -27,7 +27,6 @@ using namespace WPEFramework;
 using namespace WPEFramework::Core;
 
 static int g_shared = 1;
-static 
 
 class ThreadClass : public Core::Thread {
 public:
