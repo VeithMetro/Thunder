@@ -21,7 +21,7 @@
 
 #include <gtest/gtest.h>
 #include <core/core.h>
-//#include <thread>
+#include <thread>
 
 using namespace WPEFramework;
 using namespace WPEFramework::Core;
@@ -34,10 +34,10 @@ public:
     ThreadClass(const ThreadClass&) = delete;
     ThreadClass& operator=(const ThreadClass&) = delete;
 
-    ThreadClass(Core::CriticalSection& lock/*,std::thread::id parentId*/)
+    ThreadClass(Core::CriticalSection& lock)
         : Core::Thread(Core::Thread::DefaultStackSize(), _T("Test"))
         , _lock(lock)
-        //, _parentId(parentId)
+        , _threadId(std::this_thread::get_id())
         , _done(false)
     {
     }
@@ -46,11 +46,9 @@ public:
     {
     }
 
-// Worker itself is not causing seg faults
     virtual uint32_t Worker() override
     {
         while (IsRunning() && (!_done)) {
-            //EXPECT_TRUE(_parentId != std::this_thread::get_id());
             _lock.Lock();
             if (IsRunning()) {
                 g_shared++;
@@ -62,9 +60,15 @@ public:
         return (Core::infinite);
     }
 
+public:
+    std::thread::id GetThreadId()
+    {
+        return (_threadId);
+    }
+
 private:
     Core::CriticalSection& _lock;
-    //std::thread::id _parentId;
+    std::thread::id _threadId;
     volatile bool _done;
 };
 
@@ -83,6 +87,7 @@ TEST(test_criticalsection, simple_criticalsection)
     lock.Unlock();
 
     EXPECT_EQ(g_shared,2);
+    EXPECT_TRUE(object.GetThreadId() != std::this_thread::get_id());
 }
 
 TEST(test_binairysemaphore, simple_binairysemaphore_timeout)
