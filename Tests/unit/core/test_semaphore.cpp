@@ -45,17 +45,15 @@ public:
 
     virtual uint32_t Worker() override
     {
-        while (_done == false) {
+        //while (_done == false) {
             _lock.Lock();
-
-            if (IsRunning()) {
+            //if (IsRunning()) {
                 g_shared++;
-                _done = true;
-            }
-
+                //_done = true;
+            //}
             _lock.Unlock();
             //::SleepMs(50);
-        }
+        //}
         return (Core::infinite);
     }
 
@@ -75,17 +73,18 @@ TEST(test_criticalsection, simple_criticalsection)
     ThreadClass object;
     Core::CriticalSection& lock = object.GetLock();
 
-    lock.Lock();
-    //object.Run();
-    //object.Wait(Core::Thread::RUNNING, Core::infinite);
+    object.Run();
+    object.Wait(Core::Thread::RUNNING, Core::infinite);
 
+    lock.Lock();
     g_shared++;
+    lock.Unlock();
 
     //object.Stop();
     //object.Wait(Core::Thread::STOPPED, Core::infinite);
-    lock.Unlock();
 
     EXPECT_EQ(g_shared,2);
+    object.Stop();
 }
 
 TEST(test_binairysemaphore, simple_binairysemaphore_timeout)
