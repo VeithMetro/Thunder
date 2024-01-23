@@ -70,13 +70,13 @@ TEST(test_criticalsection, simple_criticalsection)
 {
     Core::CriticalSection lock;
 
-    //ThreadClass object(lock, std::this_thread::get_id());
-    //object.Run();
+    ThreadClass object(lock, std::this_thread::get_id());
     lock.Lock();
+    object.Run();
     g_shared++;
+    object.Stop();
     lock.Unlock();
-    //object.Stop();
-    //object.Wait(Core::Thread::STOPPED, Core::infinite);
+    object.Wait(Core::Thread::STOPPED, Core::infinite);
     EXPECT_EQ(g_shared,2);
 }
 
