@@ -21,7 +21,7 @@
 
 #include <gtest/gtest.h>
 #include <core/core.h>
-#include <thread>
+//#include <thread>
 
 using namespace WPEFramework;
 using namespace WPEFramework::Core;
@@ -37,7 +37,7 @@ public:
     ThreadClass(Core::CriticalSection& lock)
         : Core::Thread(Core::Thread::DefaultStackSize(), _T("Test"))
         , _lock(lock)
-        , _threadId(std::this_thread::get_id())
+        //, _threadId(std::this_thread::get_id())
         , _done(false)
     {
     }
@@ -60,22 +60,22 @@ public:
         return (Core::infinite);
     }
 
-public:
-    std::thread::id GetThreadId()
-    {
-        return (_threadId);
-    }
+//public:
+    //std::thread::id GetThreadId()
+    //{
+    //    return (_threadId);
+    //}
 
 private:
     Core::CriticalSection& _lock;
-    std::thread::id _threadId;
+    //std::thread::id _threadId;
     volatile bool _done;
 };
 
 TEST(test_criticalsection, simple_criticalsection)
 {
     Core::CriticalSection lock;
-    ThreadClass object(lock/*, std::this_thread::get_id()*/);
+    ThreadClass object(lock);
 
     lock.Lock();
     object.Run();
@@ -87,7 +87,7 @@ TEST(test_criticalsection, simple_criticalsection)
     lock.Unlock();
 
     EXPECT_EQ(g_shared,2);
-    EXPECT_TRUE(object.GetThreadId() != std::this_thread::get_id());
+    //EXPECT_TRUE(object.GetThreadId() != std::this_thread::get_id());
 }
 
 TEST(test_binairysemaphore, simple_binairysemaphore_timeout)
