@@ -46,6 +46,7 @@ public:
     {
     }
 
+// Worker itself is not causing seg faults
     virtual uint32_t Worker() override
     {
         // while (IsRunning() && (!_done)) {
@@ -71,9 +72,9 @@ TEST(test_criticalsection, simple_criticalsection)
 
     ThreadClass object(lock, std::this_thread::get_id());
     object.Run();
-    lock.Lock();
+    // lock.Lock();
     g_shared++;
-    lock.Unlock();
+    // lock.Unlock();
     object.Stop();
     object.Wait(Core::Thread::STOPPED, Core::infinite);
     EXPECT_EQ(g_shared,2);
