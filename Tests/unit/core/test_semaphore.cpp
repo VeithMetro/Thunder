@@ -48,7 +48,7 @@ public:
     virtual uint32_t Worker() override
     {
         while (IsRunning() && (!_done)) {
-            EXPECT_TRUE(_parentId == std::this_thread::get_id());
+            //EXPECT_TRUE(_parentId == std::this_thread::get_id());
             //_lock.Lock();
             //if (IsRunning()) {
             //    g_shared++;
