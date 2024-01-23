@@ -63,6 +63,7 @@ TEST(test_criticalsection, simple_criticalsection)
     ThreadClass object;
 
     object.Run();
+    ::SleepMs(50);
 
     _adminLock.Lock();
     g_shared++;
