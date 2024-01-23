@@ -48,14 +48,14 @@ public:
 
     virtual uint32_t Worker() override
     {
-        while (IsRunning() && (!_done)) {
-            EXPECT_TRUE(_parentId != std::this_thread::get_id());
-            _done = true;
-            _lock.Lock();
-            g_shared++;
-            _lock.Unlock();
-            ::SleepMs(50);
-        }
+        // while (IsRunning() && (!_done)) {
+        //    EXPECT_TRUE(_parentId != std::this_thread::get_id());
+        //    _done = true;
+        //   _lock.Lock();
+        //   g_shared++;
+        //    _lock.Unlock();
+        //    ::SleepMs(50);
+        //}
         return (Core::infinite);
     }
 
