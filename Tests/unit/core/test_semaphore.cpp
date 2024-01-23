@@ -26,6 +26,7 @@ using namespace WPEFramework;
 using namespace WPEFramework::Core;
 
 static int g_shared = 1;
+static Core::CriticalSection _adminLock;
 
 class ThreadClass : public Core::Thread {
 public:
@@ -34,7 +35,6 @@ public:
 
     ThreadClass()
         : Core::Thread(Core::Thread::DefaultStackSize(), _T("Test"))
-        , _lock()
         , _done(false)
     {
     }
@@ -45,38 +45,28 @@ public:
 
     virtual uint32_t Worker() override
     {
-        if (IsRunning() && (!_done)) {
-            _lock.Lock();
+        while (IsRunning() && (!_done)) {
+            _adminLock.Lock();
             g_shared++;
             _done = true;
-            ::SleepMs(50);
-            _lock.Unlock();
+            _adminLock.Unlock();
         }
         return (Core::infinite);
     }
 
-public:
-    Core::CriticalSection& GetLock()
-    {
-        return (_lock);
-    }
-
 private:
-    Core::CriticalSection _lock;
     volatile bool _done;
 };
 
 TEST(test_criticalsection, simple_criticalsection)
 {
     ThreadClass object;
-    Core::CriticalSection& lock = object.GetLock();
 
     object.Run();
-    ::SleepMs(50);
-    
-    lock.Lock();
+
+    _adminLock.Lock();
     g_shared++;
-    lock.Unlock();
+    _adminLock.Unlock();
 
     object.Stop();
 
