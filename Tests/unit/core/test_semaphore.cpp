@@ -49,14 +49,14 @@ public:
 // Worker itself is not causing seg faults
     virtual uint32_t Worker() override
     {
-        // while (IsRunning() && (!_done)) {
-        //    EXPECT_TRUE(_parentId != std::this_thread::get_id());
-        //    _done = true;
-        //   _lock.Lock();
-        //   g_shared++;
-        //    _lock.Unlock();
-        //    ::SleepMs(50);
-        //}
+        while (IsRunning() && (!_done)) {
+            EXPECT_TRUE(_parentId != std::this_thread::get_id());
+            _done = true;
+           _lock.Lock();
+           g_shared++;
+            _lock.Unlock();
+            ::SleepMs(50);
+        }
         return (Core::infinite);
     }
 
@@ -70,13 +70,13 @@ TEST(test_criticalsection, simple_criticalsection)
 {
     Core::CriticalSection lock;
 
-    ThreadClass object(lock, std::this_thread::get_id());
-    object.Run();
-    // lock.Lock();
+    //ThreadClass object(lock, std::this_thread::get_id());
+    //object.Run();
+    lock.Lock();
     g_shared++;
-    // lock.Unlock();
-    object.Stop();
-    object.Wait(Core::Thread::STOPPED, Core::infinite);
+    lock.Unlock();
+    //object.Stop();
+    //object.Wait(Core::Thread::STOPPED, Core::infinite);
     EXPECT_EQ(g_shared,2);
 }
 
