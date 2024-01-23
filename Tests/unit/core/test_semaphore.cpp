@@ -49,6 +49,7 @@ public:
             _lock.Lock();
             g_shared++;
             _done = true;
+            ::SleepMs(50);
             _lock.Unlock();
         }
         return (Core::infinite);
@@ -71,14 +72,13 @@ TEST(test_criticalsection, simple_criticalsection)
     Core::CriticalSection& lock = object.GetLock();
 
     object.Run();
-    //object.Wait(Core::Thread::RUNNING, Core::infinite);
-
+    ::SleepMs(50);
+    
     lock.Lock();
     g_shared++;
     lock.Unlock();
 
     object.Stop();
-    //object.Wait(Core::Thread::STOPPED, Core::infinite);
 
     EXPECT_EQ(g_shared,2);
 }
