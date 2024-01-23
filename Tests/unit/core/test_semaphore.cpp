@@ -33,7 +33,7 @@ public:
     ThreadClass(const ThreadClass&) = delete;
     ThreadClass& operator=(const ThreadClass&) = delete;
 
-    ThreadClass(Core::CriticalSection& lock,std::thread::id parentId)
+    ThreadClass(std::thread::id parentId)
         : Core::Thread(Core::Thread::DefaultStackSize(), _T("Test"))
         , _lock()
         , _parentId(parentId)
