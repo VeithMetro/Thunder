@@ -51,9 +51,11 @@ public:
     {
         while (IsRunning() && (!_done)) {
             EXPECT_TRUE(_parentId != std::this_thread::get_id());
-            _done = true;
-           _lock.Lock();
-           g_shared++;
+            _lock.Lock();
+            if (IsRunning()) {
+                g_shared++;
+                _done = true;
+            }
             _lock.Unlock();
             ::SleepMs(50);
         }
@@ -69,14 +71,17 @@ private:
 TEST(test_criticalsection, simple_criticalsection)
 {
     Core::CriticalSection lock;
-
     ThreadClass object(lock, std::this_thread::get_id());
+
     lock.Lock();
     object.Run();
+
     g_shared++;
+
     object.Stop();
-    lock.Unlock();
     object.Wait(Core::Thread::STOPPED, Core::infinite);
+    lock.Unlock();
+
     EXPECT_EQ(g_shared,2);
 }
 
