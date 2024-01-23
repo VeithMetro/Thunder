@@ -60,7 +60,7 @@ private:
 
 TEST(test_criticalsection, simple_criticalsection)
 {
-    //ThreadClass object;
+    ThreadClass object;
 
     //object.Run();
 
