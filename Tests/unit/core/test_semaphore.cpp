@@ -33,10 +33,10 @@ public:
     ThreadClass(const ThreadClass&) = delete;
     ThreadClass& operator=(const ThreadClass&) = delete;
 
-    ThreadClass()
+    ThreadClass(std::thread::id parentId)
         : Core::Thread(Core::Thread::DefaultStackSize(), _T("Test"))
         , _lock()
-        , _threadId(std::this_thread::get_id())
+        , _parentId(parentId)
         , _done(false)
     {
     }
@@ -48,23 +48,19 @@ public:
     virtual uint32_t Worker() override
     {
         while (IsRunning() && (!_done)) {
-            _lock.Lock();
-            if (IsRunning()) {
-                g_shared++;
+            EXPECT_TRUE(_parentId != std::this_thread::get_id());
+            //_lock.Lock();
+            //if (IsRunning()) {
+            //    g_shared++;
                 _done = true;
-            }
-            _lock.Unlock();
-            ::SleepMs(50);
+            //}
+            //_lock.Unlock();
+            //::SleepMs(50);
         }
         return (Core::infinite);
     }
 
 public:
-    std::thread::id GetThreadId()
-    {
-        return (_threadId);
-    }
-
     Core::CriticalSection& GetLock()
     {
         return (_lock);
@@ -72,25 +68,24 @@ public:
 
 private:
     Core::CriticalSection _lock;
-    std::thread::id _threadId;
+    std::thread::id _parentId;
     volatile bool _done;
 };
 
 TEST(test_criticalsection, simple_criticalsection)
 {
-    ThreadClass object;
-    EXPECT_TRUE(object.GetThreadId() != std::this_thread::get_id());
+    ThreadClass object(std::this_thread::get_id());
     Core::CriticalSection& lock = object.GetLock();
     //object.Init();
     
     lock.Lock();
-    //object.Run();
-    //object.Wait(Core::Thread::RUNNING, Core::infinite);
+    object.Run();
+    object.Wait(Core::Thread::RUNNING, Core::infinite);
 
     g_shared++;
 
-    //object.Stop();
-    //object.Wait(Core::Thread::STOPPED, Core::infinite);
+    object.Stop();
+    object.Wait(Core::Thread::STOPPED, Core::infinite);
     lock.Unlock();
 
     EXPECT_EQ(g_shared,2);
