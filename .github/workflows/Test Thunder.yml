@@ -35,7 +35,8 @@ jobs:
       uses: actions/checkout@v3
       with:
         path: Thunder
-        repository: rdkcentral/Thunder
+        repository: VeithMetro/Thunder # change to rdkcentral
+        ref: development/critical-section-test # remove
 
     - name: Regex Thunder
       if: contains(github.event.pull_request.body, '[DependsOn=Thunder:')
