@@ -27,6 +27,7 @@ using namespace WPEFramework;
 using namespace WPEFramework::Core;
 
 static int g_shared = 1;
+static 
 
 class ThreadClass : public Core::Thread {
 public:
@@ -34,9 +35,9 @@ public:
     ThreadClass(const ThreadClass&) = delete;
     ThreadClass& operator=(const ThreadClass&) = delete;
 
-    ThreadClass(Core::CriticalSection& lock)
+    ThreadClass()
         : Core::Thread(Core::Thread::DefaultStackSize(), _T("Test"))
-        , _lock(lock)
+        , _lock()
         //, _threadId(std::this_thread::get_id())
         , _done(false)
     {
@@ -66,19 +67,27 @@ public:
     //    return (_threadId);
     //}
 
+public:
+    Core::CriticalSection& GetLock()
+    {
+        return (_lock);
+    }
+
 private:
-    Core::CriticalSection& _lock;
+    Core::CriticalSection _lock;
     //std::thread::id _threadId;
     volatile bool _done;
 };
 
 TEST(test_criticalsection, simple_criticalsection)
 {
-    Core::CriticalSection lock;
-    ThreadClass object(lock);
-
+    ThreadClass object();
+    Core::CriticalSection& lock = object.GetLock();
+    object.Init();
+    
     lock.Lock();
     object.Run();
+    object.Wait(Core::Thread::RUNNING, Core::infinite);
 
     g_shared++;
 
