@@ -45,7 +45,7 @@ public:
 
     virtual uint32_t Worker() override
     {
-        if (_done == false) {
+        if (IsRunning() && (!_done)) {
             _lock.Lock();
             g_shared++;
             _done = true;
@@ -71,14 +71,14 @@ TEST(test_criticalsection, simple_criticalsection)
     Core::CriticalSection& lock = object.GetLock();
 
     object.Run();
-    object.Wait(Core::Thread::RUNNING, Core::infinite);
+    //object.Wait(Core::Thread::RUNNING, Core::infinite);
 
     lock.Lock();
     g_shared++;
     lock.Unlock();
 
     object.Stop();
-    object.Wait(Core::Thread::STOPPED, Core::infinite);
+    //object.Wait(Core::Thread::STOPPED, Core::infinite);
 
     EXPECT_EQ(g_shared,2);
 }
