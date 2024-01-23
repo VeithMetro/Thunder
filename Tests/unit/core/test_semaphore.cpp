@@ -45,15 +45,17 @@ public:
 
     virtual uint32_t Worker() override
     {
-        //while (IsRunning() && (!_done)) {
-            //_lock.Lock();
-            //if (IsRunning()) {
-            //    g_shared++;
-            //    _done = true;
-            //}
-            //_lock.Unlock();
+        while (_done == false) {
+            _lock.Lock();
+
+            if (IsRunning()) {
+                g_shared++;
+                _done = true;
+            }
+
+            _lock.Unlock();
             //::SleepMs(50);
-        //}
+        }
         return (Core::infinite);
     }
 
