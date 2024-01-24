@@ -71,6 +71,7 @@ TEST(test_criticalsection, simple_criticalsection)
 
     object.Run();
     object.Wait(Core::Thread::RUNNING, Core::infinite);
+    ::SleepMs(100);
 
     _adminLock.Lock();
     g_shared++;
