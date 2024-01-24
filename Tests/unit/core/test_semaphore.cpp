@@ -68,7 +68,8 @@ TEST(test_criticalsection, simple_criticalsection)
     g_shared++;
     _adminLock.Unlock();
 
-    //object.Stop();
+    _worker.Stop();
+    _worker.Wait(Core::Thread::STOPPED, Core::infinite);
 
     EXPECT_EQ(g_shared,2);
 }
