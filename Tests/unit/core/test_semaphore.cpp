@@ -51,12 +51,12 @@ public:
             //_done = true;
             //_adminLock.Unlock();
         //}
-        _adminLock.Lock();
         if (!_done) {
+            _adminLock.Lock();
             g_shared++;
             _done = true;
+            _adminLock.Unlock();
         }
-        _adminLock.Unlock();
 
         return (Core::infinite);
     }
