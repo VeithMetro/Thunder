@@ -46,12 +46,15 @@ public:
     virtual uint32_t Worker() override
     {
         //while (IsRunning() && (!_done)) {
-            _adminLock.Lock();
-            g_shared++;
-        //    _done = true;
-            _adminLock.Unlock();
+            //_adminLock.Lock();
+            //g_shared++;
+            //_done = true;
+            //_adminLock.Unlock();
         //}
-        
+        if (!_done) {
+            g_shared++;
+            _done = true;
+        }
         return (Core::infinite);
     }
 
