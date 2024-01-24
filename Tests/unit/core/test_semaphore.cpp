@@ -52,7 +52,7 @@ public:
             //_adminLock.Unlock();
         //}
         _adminLock.Lock();
-        if (IsRunning() && !_done) {
+        if (!_done) {
             g_shared++;
             _done = true;
         }
@@ -71,12 +71,12 @@ TEST(test_criticalsection, simple_criticalsection)
 
     _adminLock.Lock();
     object.Run();
-    
+
     g_shared++;
+    _adminLock.Unlock();
 
     object.Stop();
     object.Wait(Core::Thread::STOPPED, Core::infinite);
-    _adminLock.Unlock();
 
     EXPECT_EQ(g_shared,2);
 }
