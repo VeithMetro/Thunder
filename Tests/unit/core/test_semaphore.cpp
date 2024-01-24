@@ -51,12 +51,13 @@ public:
             //_done = true;
             //_adminLock.Unlock();
         //}
-        if (!_done) {
-            _adminLock.Lock();
-            g_shared++;
-            _done = true;
-            _adminLock.Unlock();
-        }
+
+        //if (!_done) {
+        //    _adminLock.Lock();
+        //    g_shared++;
+        //    _done = true;
+        //    _adminLock.Unlock();
+        //}
 
         return (Core::infinite);
     }
@@ -71,7 +72,6 @@ TEST(test_criticalsection, simple_criticalsection)
 
     object.Run();
     object.Wait(Core::Thread::RUNNING, Core::infinite);
-    ::SleepMs(100);
 
     _adminLock.Lock();
     g_shared++;
