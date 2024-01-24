@@ -69,9 +69,10 @@ TEST(test_criticalsection, simple_criticalsection)
 {
     ThreadClass object;
 
-    _adminLock.Lock();
     object.Run();
+    object.Wait(Core::Thread::RUNNING, Core::infinite);
 
+    _adminLock.Lock();
     g_shared++;
     _adminLock.Unlock();
 
