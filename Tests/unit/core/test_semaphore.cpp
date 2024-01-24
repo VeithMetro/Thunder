@@ -51,10 +51,13 @@ public:
             //_done = true;
             //_adminLock.Unlock();
         //}
-        if (!_done) {
+        _adminLock.Lock();
+        if (IsRunning() && !_done) {
             g_shared++;
             _done = true;
         }
+        _adminLock.Unlock();
+
         return (Core::infinite);
     }
 
@@ -66,14 +69,14 @@ TEST(test_criticalsection, simple_criticalsection)
 {
     ThreadClass object;
 
-    object.Run();
-
     _adminLock.Lock();
+    object.Run();
+    
     g_shared++;
-    _adminLock.Unlock();
 
     object.Stop();
     object.Wait(Core::Thread::STOPPED, Core::infinite);
+    _adminLock.Unlock();
 
     EXPECT_EQ(g_shared,2);
 }
